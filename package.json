@@ -1,0 +1,37 @@
+{
+  "name": "three-test",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "preact-scripts-ts": "0.9.7"
+  },
+  "dependencies": {
+    "@types/ndarray": "^1.0.1",
+    "@types/node": "^7.0.11",
+    "@types/three": "^0.84.3",
+    "gh-pages-deploy": "^0.4.2",
+    "ndarray": "^1.0.18",
+    "preact": "^7.2.1",
+    "rimraf": "^2.6.1",
+    "three": "^0.84.0",
+    "three-orbit-controls": "^82.1.0"
+  },
+  "scripts": {
+    "start": "preact-scripts-ts start",
+    "build": "preact-scripts-ts build",
+    "test": "preact-scripts-ts test --env=jsdom",
+    "eject": "preact-scripts-ts eject",
+    "deploy": "gh-pages-deploy",
+    "clean-source": "rimraf src public build package.json tsconfig.json tslint.json yarn.lock"
+  },
+  "gh-pages-deploy": {
+    "staticpath": "build",
+    "prep": [
+      "build"
+    ],
+    "post": [
+      "clean-source"
+    ],
+    "noprompt": false
+  }
+}
