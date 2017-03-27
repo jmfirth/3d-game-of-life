@@ -87,7 +87,7 @@ interface GameOptions {
 const defaultGameOptions: GameOptions = {
   width: 500,
   height: 500,
-  size: 3,
+  size: 1,
   xCells: 75,
   yCells: 75,
   zCells: 75,
@@ -152,25 +152,23 @@ function setup() {
   field = generateField(gameOptions.xCells, gameOptions.yCells, gameOptions.zCells, gameOptions.density);
 
   pMaterial = new THREE.ParticleBasicMaterial({
-    color: 0xFFFFCC,
+    color: 0xFFFFEE,
     size: gameOptions.size,
     map: THREE.ImageUtils.loadTexture('./particle.png'),
     blending: THREE.AdditiveBlending,
     transparent: true
   });
 
-  const { xCells, yCells, zCells } = gameOptions;
-  const xOffset = (xCells ) / 2;
-  const yOffset = (yCells ) / 2;
-  const zOffset = (zCells ) / 2;
+  const { xCells, yCells, zCells, size } = gameOptions;
+  const xOffset = xCells * size / 2;
+  const yOffset = yCells * size / 2;
+  const zOffset = zCells * size / 2;
 
   particles = new Array(xCells).fill(null).map((a, x) =>
     new Array(yCells).fill(null).map((b, y) =>
-      new Array(zCells).fill(null).map((c, z) => new THREE.Vector3(
-        x  - xOffset,
-        y  - yOffset,
-        z  - zOffset,
-      ))
+      new Array(zCells).fill(null).map((c, z) =>
+        new THREE.Vector3(x * size - xOffset, y * size - yOffset, z * size - zOffset)
+      )
     )
   );
 
@@ -189,10 +187,10 @@ function setup() {
 function update() {
   if (scene && field && gameOptions) {
 
-    const { xCells, yCells, zCells } = gameOptions;
-    const xOffset = (xCells ) / 2;
-    const yOffset = (yCells ) / 2;
-    const zOffset = (zCells ) / 2;
+    const { xCells, yCells, zCells, size } = gameOptions;
+    const xOffset = xCells * size / 2;
+    const yOffset = yCells * size / 2;
+    const zOffset = zCells * size / 2;
 
     let live = 0, dead = 0;
     for (let x = 1; x < xCells; x++) {
@@ -200,9 +198,9 @@ function update() {
         for (let z = 1; z < zCells; z++) {
           const current = particles[x][y][z];
           if (field.get(x, y, z) > 0) {
-            current.x = x  - xOffset;
-            current.y = y  - yOffset;
-            current.z = z  - zOffset;
+            current.x = x * size - xOffset;
+            current.y = y * size - yOffset;
+            current.z = z * size - zOffset;
             live += 1;
           } else {
             current.x = 9999;
@@ -231,8 +229,6 @@ function render() {
     createNewGeneration(field, nextField);
     field = nextField;
     update();
-    // console.log('verticies', particlesGeo.vertices.length);
-    /* */
     particleSystem.rotation.y += 0.01;
 
   }
