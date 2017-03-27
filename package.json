@@ -24,6 +24,7 @@
     "deploy": "gh-pages-deploy",
     "clean-source": "rimraf src public build package.json tsconfig.json tslint.json yarn.lock"
   },
+  "homepage": "http://jmfirth.github.io/3d-game-of-life",
   "gh-pages-deploy": {
     "staticpath": "build",
     "prep": [
